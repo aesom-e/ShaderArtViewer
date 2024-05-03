@@ -75,6 +75,7 @@ float getElapsedTime() {
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
+// Windows' main function. Equivalent to main() on normal C
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow) {
     GetSystemTime(&startTime);
 
@@ -83,7 +84,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     int argc;
     LPWSTR* argv = CommandLineToArgvW(commandLine, &argc);
 
-    if (argc < 2) {
+    if(argc < 2) {
         MessageBox(NULL, "A DLL file must be provided", "Input", MB_ICONERROR);
         exit(0);
     }
@@ -95,27 +96,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     WideCharToMultiByte(CP_UTF8, 0, argv[argc-1], -1, fileName, bufferSize, NULL, NULL);
 
     hDLL = LoadLibrary(fileName);
-    if (hDLL == NULL) {
+    if(hDLL == NULL) {
         MessageBox(NULL, "DLL failed to load", "Error", MB_ICONERROR);
         exit(-1);
     }
     shadeFunction = (ShadeFunction)GetProcAddress(hDLL, "shade");
-    if (shadeFunction == NULL) {
+    if(shadeFunction == NULL) {
         MessageBox(NULL, "Function \"shade(flags, pixel, float)\" failed to load", "Error", MB_ICONERROR);
         exit(-1);
     }
     getCustomFlagsFunction = (GetCustomFlagsFunction)GetProcAddress(hDLL, "getCustomFlags");
-    if (shadeFunction == NULL) {
+    if(shadeFunction == NULL) {
         MessageBox(NULL, "Function \"getCustomFlags(LPWSTR)\" failed to load", "Error", MB_ICONERROR);
         exit(-1);
     }
 
     getCustomFlagsFunction(commandLine);
 
-    // Register the window class.
+    // Register the window class
     const char CLASS_NAME[] = "Shader Render";
 
-    WNDCLASS wc = { };
+    WNDCLASS wc = {};
 
     wc.lpfnWndProc = WindowProc;
     wc.hInstance = hInstance;
@@ -123,23 +124,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     RegisterClass(&wc);
 
-    // Create the window.
+    // Create the window
     HWND hwnd = CreateWindowEx(
-            0,                              // Optional window styles.
-            CLASS_NAME,                     // Window class
-            "Shader Render at t=0.0s",                // Window text
-            WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,            // Window style
-
-            // Size and position
+            0,
+            CLASS_NAME,
+            "Shader Render at t=0.0s",
+            WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU,
             CW_USEDEFAULT, CW_USEDEFAULT, inputFlags.screenWidth, inputFlags.screenHeight,
-
-            NULL,       // Parent window
-            NULL,       // Menu
-            hInstance,  // Instance handle
-            NULL        // Additional application data
+            NULL,
+            NULL,
+            hInstance,
+            NULL
     );
 
-    if (hwnd == NULL) {
+    if(hwnd == NULL) {
         return 0;
     }
 
@@ -147,9 +145,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     ShowWindow(hwnd, nCmdShow);
 
-    // Run the message loop.
-    MSG msg = { };
-    while (GetMessage(&msg, NULL, 0, 0)) {
+    // Run the message loop
+    MSG msg = {};
+    while(GetMessage(&msg, NULL, 0, 0)) {
         TranslateMessage(&msg);
         DispatchMessage(&msg);
     }
@@ -158,29 +156,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 }
 
 LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
+    switch(uMsg) {
         case WM_DESTROY:
             PostQuitMessage(0);
             return 0;
-
         case WM_TIMER:
             InvalidateRect(hwnd, NULL, FALSE); // Invalidate the entire window to trigger a repaint
             return 0;
-
         case WM_PAINT: {
             PAINTSTRUCT ps;
             HDC hdc = BeginPaint(hwnd, &ps);
 
             // Create a compatible memory device context
             HDC memDC = CreateCompatibleDC(hdc);
-            if (memDC == NULL) {
+            if(memDC == NULL) {
                 EndPaint(hwnd, &ps);
                 return 0;
             }
 
             // Create a bitmap compatible with the window's DC
             HBITMAP hBitmap = CreateCompatibleBitmap(hdc, inputFlags.screenWidth, inputFlags.screenHeight);
-            if (hBitmap == NULL) {
+            if(hBitmap == NULL) {
                 DeleteDC(memDC);
                 EndPaint(hwnd, &ps);
                 return 0;
@@ -235,9 +231,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             SetWindowText(hwnd, windowTitle);
         }
             return 0;
-
         default:
             return DefWindowProc(hwnd, uMsg, wParam, lParam);
     }
-    return 0;
 }
