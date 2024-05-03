@@ -1,6 +1,7 @@
 #include <math.h>
 #include <windows.h>
 #include <string.h>
+#include <stdio.h>
 #include "base.h"
 #include "colours.h"
 
@@ -22,6 +23,14 @@ void getCustomFlags(LPWSTR commandLine) {
         int bufferSize = WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, NULL, 0, NULL, NULL);
         char* argument = (char*)malloc(bufferSize);
         WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, argument, bufferSize, NULL, NULL);
+
+        // Print custom arguments
+        if(strcmp("--help", argument) == 0) {
+            printf("No custom arguments\n");
+            /// printf("Program arguments:\n");
+            /// printf("a (float) | Does nothing right now\n");
+            exit(0);
+        }
 
         // tempArg is set to a number below this switch statement
         // Inside the switch, check for what argument was last called and preform logic based on that
