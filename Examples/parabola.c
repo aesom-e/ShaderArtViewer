@@ -24,7 +24,7 @@ void getCustomFlags(LPWSTR commandLine) {
 
         if(strcmp("--help", argument) == 0) {
             printf("Program arguments:\n");
-            printf("a (float) | Set's the 'a' value of the parabola (y=ax^2)\n");
+            printf("a (float) [Default 1] | Set's the 'a' value of the parabola (y=ax^2)\n");
             exit(0);
         }
 
