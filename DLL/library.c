@@ -15,6 +15,7 @@ struct {
 // Gets custom command line flags. Use --[flag] for custom flags
 void getCustomFlags(LPWSTR commandLine) {
     // Default values go below
+    /// customFlags.a = 1;
 
     int argc, i, tempArg = 0;
     float temp;
@@ -28,7 +29,7 @@ void getCustomFlags(LPWSTR commandLine) {
         if(strcmp("--help", argument) == 0) {
             printf("No custom arguments\n");
             /// printf("Program arguments:\n");
-            /// printf("a (float) | Does nothing right now\n");
+            /// printf("a (float) [Default 1] | Does nothing right now\n");
             exit(0);
         }
 
