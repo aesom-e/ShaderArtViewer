@@ -39,6 +39,8 @@ void getCustomFlags(LPWSTR commandLine) {
     }
 }
 
+// Main function, called per pixel per frame
+// screenPixel has the location of the pixel currently being rendered and t is the current time
 pixelColour shade(flags programFlags, pixel screenPixel, float t) {
     pixelColour returnColour = {0};
 
