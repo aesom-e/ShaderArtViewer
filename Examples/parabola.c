@@ -23,7 +23,7 @@ void getCustomFlags(LPWSTR commandLine) {
         WideCharToMultiByte(CP_UTF8, 0, argv[i], -1, argument, bufferSize, NULL, NULL);
 
         if(strcmp("--help", argument) == 0) {
-            printf("Program Arguments:\n");
+            printf("Program arguments:\n");
             printf("a (float) | Set's the 'a' value of the parabola (y=ax^2)\n");
             exit(0);
         }
