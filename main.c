@@ -49,8 +49,8 @@ void getFlags(LPWSTR commandLine) {
                 break;
         }
 
-        if(strcmp(argument, "-D") == 0) inputFlags.debug = 1;
-        if(strcmp(argument, "-W") == 0 || strcmp(argument, "-width") == 0) tempArg = 1;
+        if(strcmp(argument, "-D") == 0)                                     inputFlags.debug = 1;
+        if(strcmp(argument, "-W") == 0 || strcmp(argument, "-width") == 0)  tempArg = 1;
         if(strcmp(argument, "-H") == 0 || strcmp(argument, "-height") == 0) tempArg = 2;
 
         free(argument);
@@ -65,7 +65,7 @@ float getElapsedTime() {
     float elapsedTime = ((float) (currentTime.wSecond - startTime.wSecond) +
                          (float) (currentTime.wMinute - startTime.wMinute) * 60 +
                          (float) (currentTime.wHour - startTime.wHour) * 3600) +
-                        (float) (currentTime.wMilliseconds - startTime.wMilliseconds) / 1000.0f;
+                         (float) (currentTime.wMilliseconds - startTime.wMilliseconds) / 1000.0f;
 
     return elapsedTime;
 }
@@ -183,7 +183,7 @@ LRESULT CALLBACK WindowProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
             HBITMAP hBitmapOld = (HBITMAP)SelectObject(memDC, hBitmap);
 
             // Allocate memory for the pixel data
-            pixelColour *pixelData = (pixelColour *)malloc(inputFlags.screenWidth * inputFlags.screenHeight * sizeof(pixelColour));
+            pixelColour* pixelData = (pixelColour*)malloc(inputFlags.screenWidth * inputFlags.screenHeight * sizeof(pixelColour));
 
             float elapsedTime = getElapsedTime();
             int x, y;
