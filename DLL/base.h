@@ -10,7 +10,6 @@ typedef struct {
 
 typedef struct {
     char debug;
-    char useDLL;
     unsigned short screenWidth;
     unsigned short screenHeight;
 } flags;
