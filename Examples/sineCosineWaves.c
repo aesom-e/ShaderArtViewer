@@ -62,7 +62,7 @@ pixelColour shade(flags programFlags, pixel screenPixel, float t) {
     point difference = getSignedDifference(center, screenPixel);
 
     // Calculate and execute cutoff if scrollSpeed != 0
-    int pixelCutoff = ((int)(t * (float)customFlags.scrollSpeed * customFlags.scale) % programFlags.screenWidth);
+    int pixelCutoff = ((int)(t * (float)customFlags.scrollSpeed * (customFlags.scale / 2)) % programFlags.screenWidth);
     if(screenPixel.x > pixelCutoff && customFlags.scrollSpeed != 0) return returnColour;
 
     // Draw the sine wave
