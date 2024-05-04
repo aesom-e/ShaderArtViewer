@@ -12,7 +12,7 @@ typedef struct {
     unsigned short screenHeight;
 } flags;
 
-flags inputFlags;
+flags inputFlags = {0};
 char* fileName;
 
 // DLL stuff
@@ -22,12 +22,11 @@ typedef void (*GetCustomFlagsFunction)(LPWSTR);
 ShadeFunction shadeFunction;
 GetCustomFlagsFunction getCustomFlagsFunction;
 
-flags getFlags(LPWSTR commandLine) {
-    flags ret = {0};
+void getFlags(LPWSTR commandLine) {
 
     // Set default (non-zero) arguments
-    ret.screenWidth = 640;
-    ret.screenHeight = 320;
+    inputFlags.screenWidth = 640;
+    inputFlags.screenHeight = 320;
 
     // Get custom arguments
     int argc, i, tempArg = 0, temp;
@@ -39,25 +38,23 @@ flags getFlags(LPWSTR commandLine) {
 
         switch(tempArg) {
             case 1:
-                temp = atoi(argument);
-                if(temp > 0) ret.screenWidth = temp;
                 tempArg = 0;
+                temp = atoi(argument);
+                if(temp > 0) inputFlags.screenWidth = temp;
                 break;
             case 2:
-                temp = atoi(argument);
-                if(temp > 0) ret.screenHeight = temp;
                 tempArg = 0;
+                temp = atoi(argument);
+                if(temp > 0) inputFlags.screenHeight = temp;
                 break;
         }
 
-        if(strcmp(argument, "-D") == 0) ret.debug = 1;
+        if(strcmp(argument, "-D") == 0) inputFlags.debug = 1;
         if(strcmp(argument, "-W") == 0 || strcmp(argument, "-width") == 0) tempArg = 1;
         if(strcmp(argument, "-H") == 0 || strcmp(argument, "-height") == 0) tempArg = 2;
 
         free(argument);
     }
-
-    return ret;
 }
 
 float getElapsedTime() {
@@ -68,7 +65,7 @@ float getElapsedTime() {
     float elapsedTime = ((float) (currentTime.wSecond - startTime.wSecond) +
                          (float) (currentTime.wMinute - startTime.wMinute) * 60 +
                          (float) (currentTime.wHour - startTime.wHour) * 3600) +
-                         (float) (currentTime.wMilliseconds - startTime.wMilliseconds) / 1000.0f;
+                        (float) (currentTime.wMilliseconds - startTime.wMilliseconds) / 1000.0f;
 
     return elapsedTime;
 }
@@ -89,7 +86,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         exit(0);
     }
 
-    inputFlags = getFlags(commandLine);
+    getFlags(commandLine);
 
     int bufferSize = WideCharToMultiByte(CP_UTF8, 0, argv[argc-1], -1, NULL, 0, NULL, NULL);
     fileName = (char*)malloc(bufferSize);
